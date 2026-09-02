@@ -427,22 +427,58 @@
     const rows = [];
     let current = null;
 
-    function flush() {
-      if (!current) return;
-      if (isIgnoredName(current.name)) { current = null; return; }
-      const bodyText = current.body.join(' ').replace(/\s+/g, ' ').trim();
-      const m = bodyText.match(PHONE_RE);
-      if (m) {
-        const digitsOnly = m[1].replace(/\D/g, '');
-        if (digitsOnly.length >= 7) {
-          let status = (bodyText.slice(0, m.index) + ' ' + bodyText.slice(m.index + m[1].length))
-            .replace(/\s+/g, ' ').trim();
-          if (!status) status = 'others';
-          rows.push({ ok: true, name: current.name, phone: digitsOnly, status });
-        }
-      }
-      current = null;
+function flush() {
+    if (!current) return;
+
+    if (isIgnoredName(current.name)) {
+        current = null;
+        return;
     }
+
+    const bodyText = current.body.join(" ").replace(/\s+/g, " ").trim();
+
+    const m = bodyText.match(PHONE_RE);
+
+    if (m) {
+
+        const digitsOnly = m[1].replace(/\D/g, "");
+
+        if (digitsOnly.length >= 7) {
+
+            let status = (
+                bodyText.slice(0, m.index) +
+                " " +
+                bodyText.slice(m.index + m[1].length)
+            )
+            .replace(/\s+/g, " ")
+            .trim();
+
+            // -------------------------
+            // STATUS LOGIC
+            // -------------------------
+
+            if (/help/i.test(status)) {
+                status = "Help";
+            }
+            else if (/^\d+$/.test(status) || status === "") {
+                status = "Others";
+            }
+            else {
+                status = "Others";
+            }
+
+            rows.push({
+                ok: true,
+                name: current.name,
+                phone: digitsOnly,
+                status
+            });
+
+        }
+    }
+
+    current = null;
+}
 
     for (const rawLine of lines) {
       const line = rawLine.replace(/\t/g, ' ').trim();
