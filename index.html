@@ -538,9 +538,18 @@
     return [header, ...body].join('\n');
   }
 
+  function toTsv(rows) {
+    const clean = v => v.replace(/\t/g, ' ').replace(/\r?\n/g, ' ');
+    const header = ['name', 'phone', 'status'].join('\t');
+    const body = rows.filter(r => r.ok).map(r =>
+      [clean(r.name), clean(r.phone), clean(r.status)].join('\t')
+    );
+    return [header, ...body].join('\n');
+  }
+
   copyBtn.addEventListener('click', () => {
     if (!lastRows.length) return;
-    navigator.clipboard.writeText(toCsv(lastRows)).then(() => {
+    navigator.clipboard.writeText(toTsv(lastRows)).then(() => {
       const orig = copyBtn.innerHTML;
       copyBtn.textContent = 'Copied';
       setTimeout(() => { copyBtn.innerHTML = orig; }, 1200);
