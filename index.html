@@ -424,12 +424,6 @@
 
   function parseZoomChat(text) {
     const lines = text.split(/\r?\n/);
-    // Ignore header row
-if (
-    name.trim().toLowerCase() === "name" &&
-    phoneRaw.trim().toLowerCase() === "phone" &&
-    status.trim().toLowerCase() === "status"
-) {
     continue;
 }
     const rows = [];
@@ -505,12 +499,6 @@ function flush() {
 
   function parseGeneric(text) {
     const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
-    // Ignore header row
-if (
-    name.trim().toLowerCase() === "name" &&
-    phoneRaw.trim().toLowerCase() === "phone" &&
-    status.trim().toLowerCase() === "status"
-) {
     continue;
 }
     const rows = [];
@@ -583,7 +571,10 @@ rows.push({
   function renderResults(rows) {
     resultsSection.style.display = 'block';
     resultsBody.innerHTML = '';
-    const good = rows.filter(r => r.ok);
+    const good = rows.filter(r =>
+    r.ok &&
+    r.name.trim().toLowerCase() !== "name"
+);
     const bad = rows.filter(r => !r.ok);
 
     countBadge.innerHTML = `<b>${good.length}</b> found`;
