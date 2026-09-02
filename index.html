@@ -424,6 +424,14 @@
 
   function parseZoomChat(text) {
     const lines = text.split(/\r?\n/);
+    // Ignore header row
+if (
+    name.trim().toLowerCase() === "name" &&
+    phoneRaw.trim().toLowerCase() === "phone" &&
+    status.trim().toLowerCase() === "status"
+) {
+    continue;
+}
     const rows = [];
     let current = null;
 
@@ -497,6 +505,14 @@ function flush() {
 
   function parseGeneric(text) {
     const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+    // Ignore header row
+if (
+    name.trim().toLowerCase() === "name" &&
+    phoneRaw.trim().toLowerCase() === "phone" &&
+    status.trim().toLowerCase() === "status"
+) {
+    continue;
+}
     const rows = [];
     for (const rawLine of lines) {
       const line = stripChatPrefix(rawLine).replace(/^[-*]\s*/, '');
