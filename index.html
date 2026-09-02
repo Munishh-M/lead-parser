@@ -300,8 +300,6 @@
 
   <header>
     <p class="eyebrow">Chat Extractor</p>
-    <h1></h1>
-    <div class="rule"></div>
 
   <section>
     <div class="panel">
@@ -429,57 +427,21 @@
     const rows = [];
     let current = null;
 
-function flush() {
-    if (!current) return;
-
-    if (isIgnoredName(current.name)) {
-        current = null;
-        return;
-    }
-
-    const bodyText = current.body.join(" ").replace(/\s+/g, " ").trim();
-
-    const m = bodyText.match(PHONE_RE);
-
-    if (m) {
-
-        const digitsOnly = m[1].replace(/\D/g, "");
-
+    function flush() {
+      if (!current) return;
+      if (isIgnoredName(current.name)) { current = null; return; }
+      const bodyText = current.body.join(' ').replace(/\s+/g, ' ').trim();
+      const m = bodyText.match(PHONE_RE);
+      if (m) {
+        const digitsOnly = m[1].replace(/\D/g, '');
         if (digitsOnly.length >= 7) {
-
-            let status = (
-                bodyText.slice(0, m.index) +
-                " " +
-                bodyText.slice(m.index + m[1].length)
-            )
-            .replace(/\s+/g, " ")
-            .trim();
-
-            // -------------------------
-            // STATUS LOGIC
-            // -------------------------
-
-            if (/help/i.test(status)) {
-                status = "Help";
-            }
-            else if (/^\d+$/.test(status) || status === "") {
-                status = "Others";
-            }
-            else {
-                status = "Others";
-            }
-
-            rows.push({
-                ok: true,
-                name: current.name,
-                phone: digitsOnly,
-                status
-            });
-
+          let status = (bodyText.slice(0, m.index) + ' ' + bodyText.slice(m.index + m[1].length))
+            .replace(/\s+/g, ' ').trim();
+          if (!status) status = 'others';
+          rows.push({ ok: true, name: current.name, phone: digitsOnly, status });
         }
-    }
-
-    current = null;
+      }
+      current = null;
     }
 
     for (const rawLine of lines) {
@@ -497,7 +459,16 @@ function flush() {
     return rows;
   }
 
-  let name = line.slice(0, m.index)
+  function parseGeneric(text) {
+    const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+    const rows = [];
+    for (const rawLine of lines) {
+      const line = stripChatPrefix(rawLine).replace(/^[-*]\s*/, '');
+      const m = line.match(PHONE_RE);
+      if (m) {
+        const phoneRaw = m[1];
+        const digitsOnly = phoneRaw.replace(/\D/g, '');
+let name = line.slice(0, m.index)
     .trim()
     .replace(/[,:\-–]\s*$/, "")
     .trim();
@@ -535,6 +506,12 @@ rows.push({
     status,
     original: rawLine
 });
+      } else {
+        rows.push({ ok: false, name: '', phone: '', status: '', original: rawLine });
+      }
+    }
+    return rows;
+  }
 
   function parseText(text) {
     return looksLikeZoomChat(text) ? parseZoomChat(text) : parseGeneric(text);
