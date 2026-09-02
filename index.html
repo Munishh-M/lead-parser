@@ -424,10 +424,9 @@
 
   function parseZoomChat(text) {
     const lines = text.split(/\r?\n/);
-    continue;
-}
     const rows = [];
     let current = null;
+  }
 
 function flush() {
     if (!current) return;
@@ -499,8 +498,6 @@ function flush() {
 
   function parseGeneric(text) {
     const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
-    continue;
-}
     const rows = [];
     for (const rawLine of lines) {
       const line = stripChatPrefix(rawLine).replace(/^[-*]\s*/, '');
@@ -575,7 +572,10 @@ rows.push({
     r.ok &&
     r.name.trim().toLowerCase() !== "name"
 );
-    const bad = rows.filter(r => !r.ok);
+    const bad = rows.filter(r =>
+    r.ok &&
+    r.name.trim().toLowerCase() !== "name"
+);
 
     countBadge.innerHTML = `<b>${good.length}</b> found`;
     resultsNote.textContent = bad.length
