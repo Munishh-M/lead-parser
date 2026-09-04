@@ -8,16 +8,18 @@
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
   :root{
-    --obsidian: #0c0d0f;
-    --panel: #131417;
-    --panel-raised: #191a1e;
-    --hairline: #2a2c31;
-    --hairline-soft: #1f2024;
-    --parchment: #f2eee5;
-    --parchment-dim: #8d8b83;
-    --brass: #c9a15a;
-    --brass-soft: #8a744a;
-    --sage: #8caea3;
+    --obsidian: #0d1416;
+    --panel: #131c1f;
+    --panel-raised: #192327;
+    --hairline: #263336;
+    --hairline-soft: #1a2427;
+    --parchment: #f4f5fa;
+    --parchment-dim: #8d9a9b;
+    --brass: #ff7a45;
+    --brass-soft: #b85a37;
+    --sage: #4fd8c4;
+    --help: #ff6b81;
+    --others: #4fd8c4;
   }
 
   *{box-sizing:border-box;}
@@ -25,7 +27,8 @@
   body{
     background:var(--obsidian);
     background-image:
-      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(201,161,90,0.05), transparent 60%);
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(255,122,69,0.06), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 30%, rgba(79,216,196,0.07), transparent 60%);
     color:var(--parchment);
     font-family:'Inter', sans-serif;
     min-height:100vh;
@@ -270,6 +273,16 @@
     border-radius:999px;
     border:1px solid var(--brass-soft);
     color:var(--brass);
+  }
+  .tag.tag-help{
+    border-color:var(--help);
+    color:var(--help);
+    background:rgba(255,107,129,0.08);
+  }
+  .tag.tag-others{
+    border-color:var(--others);
+    color:var(--others);
+    background:rgba(79,216,196,0.08);
   }
 
   .empty-state{
@@ -529,10 +542,11 @@
     for (const r of good) {
       const row = document.createElement('div');
       row.className = 'row';
+      const tagClass = r.status === 'Help' ? 'tag-help' : 'tag-others';
       row.innerHTML = `
         <span class="name">${escapeHtml(r.name)}</span>
         <span class="phone">${escapeHtml(r.phone)}</span>
-        <span class="tag" title="${escapeHtml(r.status)}">${escapeHtml(r.status)}</span>`;
+        <span class="tag ${tagClass}" title="${escapeHtml(r.status)}">${escapeHtml(r.status)}</span>`;
       resultsBody.appendChild(row);
     }
   }
