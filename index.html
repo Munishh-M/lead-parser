@@ -300,6 +300,7 @@
 
   <header>
     <p class="eyebrow">Chat Extractor</p>
+  </header>
 
   <section>
     <div class="panel">
@@ -342,7 +343,7 @@
 
     <div class="ledger">
       <div class="row head">
-        <span></span><span></span><span></span>
+        <span>Name</span><span>Phone</span><span>Status</span>
       </div>
       <div id="resultsBody"></div>
     </div>
@@ -414,6 +415,10 @@
   const PHONE_RE = /(\+?\d[\d\s\-]{6,15}\d)/;
   const ZOOM_HEADER_RE = /^\d{1,2}:\d{2}:\d{2}\s+From\s+(.+?)\s+to\s+(.+?):\s*$/;
 
+  function normalizeStatus(rawStatus) {
+    return /help/i.test(rawStatus || '') ? 'Help' : 'Others';
+  }
+
   function looksLikeZoomChat(text) {
     return text.split(/\r?\n/).some(l => ZOOM_HEADER_RE.test(l.trim()));
   }
@@ -426,60 +431,23 @@
     const lines = text.split(/\r?\n/);
     const rows = [];
     let current = null;
-  }
 
-function flush() {
-    if (!current) return;
-
-    if (isIgnoredName(current.name)) {
-        current = null;
-        return;
-    }
-
-    const bodyText = current.body.join(" ").replace(/\s+/g, " ").trim();
-
-    const m = bodyText.match(PHONE_RE);
-
-    if (m) {
-
-        const digitsOnly = m[1].replace(/\D/g, "");
-
+    function flush() {
+      if (!current) return;
+      if (isIgnoredName(current.name)) { current = null; return; }
+      const bodyText = current.body.join(' ').replace(/\s+/g, ' ').trim();
+      const m = bodyText.match(PHONE_RE);
+      if (m) {
+        const digitsOnly = m[1].replace(/\D/g, '');
         if (digitsOnly.length >= 7) {
-
-            let status = (
-                bodyText.slice(0, m.index) +
-                " " +
-                bodyText.slice(m.index + m[1].length)
-            )
-            .replace(/\s+/g, " ")
-            .trim();
-
-            // -------------------------
-            // STATUS LOGIC
-            // -------------------------
-
-            if (/help/i.test(status)) {
-                status = "Help";
-            }
-            else if (/^\d+$/.test(status) || status === "") {
-                status = "Others";
-            }
-            else {
-                status = "Others";
-            }
-
-            rows.push({
-                ok: true,
-                name: current.name,
-                phone: digitsOnly,
-                status
-            });
-
+          let status = (bodyText.slice(0, m.index) + ' ' + bodyText.slice(m.index + m[1].length))
+            .replace(/\s+/g, ' ').trim();
+          status = normalizeStatus(status);
+          rows.push({ ok: true, name: current.name, phone: digitsOnly, status });
         }
+      }
+      current = null;
     }
-
-    current = null;
-}
 
     for (const rawLine of lines) {
       const line = rawLine.replace(/\t/g, ' ').trim();
@@ -505,44 +473,12 @@ function flush() {
       if (m) {
         const phoneRaw = m[1];
         const digitsOnly = phoneRaw.replace(/\D/g, '');
-let name = line.slice(0, m.index)
-    .trim()
-    .replace(/[,:\-–]\s*$/, "")
-    .trim();
-
-let status = line
-    .slice(m.index + phoneRaw.length)
-    .trim()
-    .replace(/^[,:\-–]\s*/, "")
-    .trim();
-
-if (!name) {
-    name = "—";
-}
-
-// -------------------------
-// STATUS LOGIC
-// -------------------------
-
-if (/help/i.test(status)) {
-    status = "Help";
-}
-else if (/^\d+$/.test(status) || status === "") {
-    status = "Others";
-}
-else {
-    status = "Others";
-}
-
-if (isIgnoredName(name)) continue;
-
-rows.push({
-    ok: true,
-    name,
-    phone: digitsOnly,
-    status,
-    original: rawLine
-});
+        let name = line.slice(0, m.index).trim().replace(/[,:\-–]\s*$/, '').trim();
+        let status = line.slice(m.index + phoneRaw.length).trim().replace(/^[,:\-–]\s*/, '').trim();
+        if (!name) name = '—';
+        status = normalizeStatus(status);
+        if (isIgnoredName(name)) continue;
+        rows.push({ ok: true, name, phone: digitsOnly, status, original: rawLine });
       } else {
         rows.push({ ok: false, name: '', phone: '', status: '', original: rawLine });
       }
@@ -568,14 +504,8 @@ rows.push({
   function renderResults(rows) {
     resultsSection.style.display = 'block';
     resultsBody.innerHTML = '';
-    const good = rows.filter(r =>
-    r.ok &&
-    r.name.trim().toLowerCase() !== "name"
-);
-    const bad = rows.filter(r =>
-    r.ok &&
-    r.name.trim().toLowerCase() !== "name"
-);
+    const good = rows.filter(r => r.ok);
+    const bad = rows.filter(r => !r.ok);
 
     countBadge.innerHTML = `<b>${good.length}</b> found`;
     resultsNote.textContent = bad.length
@@ -602,20 +532,18 @@ rows.push({
   }
 
   function toCsv(rows) {
-    const header = 'name,phone,status';
     const body = rows.filter(r => r.ok).map(r =>
       [r.name, r.phone, r.status].map(v => `"${v.replace(/"/g,'""')}"`).join(',')
     );
-    return [header, ...body].join('\n');
+    return body.join('\n');
   }
 
   function toTsv(rows) {
     const clean = v => v.replace(/\t/g, ' ').replace(/\r?\n/g, ' ');
-    const header = ['name', 'phone', 'status'].join('\t');
     const body = rows.filter(r => r.ok).map(r =>
       [clean(r.name), clean(r.phone), clean(r.status)].join('\t')
     );
-    return [header, ...body].join('\n');
+    return body.join('\n');
   }
 
   copyBtn.addEventListener('click', () => {
