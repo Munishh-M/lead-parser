@@ -4,32 +4,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ledger — call list extractor</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgo8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM1YjdmZmYiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjOWI1YmZmIi8+CjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHJ4PSIxNiIgZmlsbD0idXJsKCNnKSIvPgo8cGF0aCBkPSJNMjIgMTljMC0yLjIgMS44LTQgNC00aDIuMmMxIDAgMS45LjcgMi4xIDEuN2wxLjYgNi40Yy4yLjktLjEgMS44LS44IDIuNGwtMi42IDIuMmMyLjEgNC44IDYgOC43IDEwLjggMTAuOGwyLjItMi42Yy42LS43IDEuNS0xIDIuNC0uOGw2LjQgMS42YzEgLjIgMS43IDEuMSAxLjcgMi4xVjQxYzAgMi4yLTEuOCA0LTQgNEMzMS45IDQ1IDE5IDMyLjEgMTkgMTl6IiBmaWxsPSIjZmZmZmZmIi8+Cjwvc3ZnPg==">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgo8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNhODU1ZjciLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZmY0ZmEzIi8+CjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHJ4PSIxNiIgZmlsbD0idXJsKCNnKSIvPgo8cGF0aCBkPSJNMjIgMTljMC0yLjIgMS44LTQgNC00aDIuMmMxIDAgMS45LjcgMi4xIDEuN2wxLjYgNi40Yy4yLjktLjEgMS44LS44IDIuNGwtMi42IDIuMmMyLjEgNC44IDYgOC43IDEwLjggMTAuOGwyLjItMi42Yy42LS43IDEuNS0xIDIuNC0uOGw2LjQgMS42YzEgLjIgMS43IDEuMSAxLjcgMi4xVjQxYzAgMi4yLTEuOCA0LTQgNEMzMS45IDQ1IDE5IDMyLjEgMTkgMTl6IiBmaWxsPSIjZmZmZmZmIi8+Cjwvc3ZnPg==">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
   :root{
-    --obsidian: #0b0c1a;
-    --panel: #14162a;
-    --panel-raised: #1a1d38;
-    --hairline: #2a2c4d;
-    --hairline-soft: #1c1e38;
-    --parchment: #f3f2fb;
-    --parchment-dim: #9294b8;
-    --brass: #6f83ff;
-    --brass-soft: #5648a8;
-    --sage: #9b8bff;
-    --help: #ff5b9a;
-    --others: #8b6bff;
+    --obsidian: #150a1e;
+    --panel: #1e1130;
+    --panel-raised: #261a40;
+    --hairline: #3a2454;
+    --hairline-soft: #291640;
+    --parchment: #f8f1fb;
+    --parchment-dim: #ab93c4;
+    --brass: #c661ff;
+    --brass-soft: #8b3ec4;
+    --sage: #e07aff;
+    --help: #ff4fa3;
+    --others: #a855f7;
   }
 
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
     background:
-      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(111,131,255,0.09), transparent 60%),
-      radial-gradient(ellipse 700px 500px at 100% 30%, rgba(155,107,255,0.09), transparent 60%),
-      linear-gradient(160deg, #0a0c1c 0%, #10122c 35%, #171338 70%, #1c1140 100%);
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(168,85,247,0.10), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 30%, rgba(255,79,163,0.09), transparent 60%),
+      linear-gradient(160deg, #170a22 0%, #200c30 35%, #2b0f3f 70%, #3a0f42 100%);
     color:var(--parchment);
     font-family:'Inter', sans-serif;
     min-height:100vh;
@@ -90,7 +90,7 @@
     border:1px solid var(--hairline);
     border-radius:10px;
     background:
-      linear-gradient(160deg, rgba(111,131,255,0.045), rgba(155,107,255,0.045)),
+      linear-gradient(160deg, rgba(168,85,247,0.05), rgba(255,79,163,0.05)),
       var(--panel);
     padding:36px;
   }
@@ -185,8 +185,8 @@
     letter-spacing:0.01em;
   }
   .btn-primary{
-    background:linear-gradient(135deg, #6f83ff, #9b5bff);
-    color:#0b0c1a;
+    background:linear-gradient(135deg, #a855f7, #ff4fa3);
+    color:#1a0a20;
     border:1px solid transparent;
     border-radius:7px;
     padding:13px 24px;
@@ -365,7 +365,7 @@
     </div>
   </section>
 
-  <footer></footer>
+  <footer>runs entirely in your browser — nothing is uploaded anywhere</footer>
 </div>
 
 <script>
@@ -386,7 +386,7 @@
   let currentFileName = 'leads';
   let lastRows = [];
 
-  const IGNORED_NAMES = ['dr prabhakar raj team'];
+  const IGNORED_NAMES = ['dr prabhakar raj team', 'dr prabhakar raj'];
 
   drop.addEventListener('click', () => fileInput.click());
   drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('hover'); });
@@ -428,8 +428,11 @@
       .replace(/^\d{1,4}[\/\-.]\d{1,2}[\/\-.]\d{1,4},?\s*\d{1,2}[:.]\d{2}(?:[:.]\d{2})?(?:\s?[APap][Mm])?\s*-\s*/, '');
   }
 
-  const PHONE_RE = /(\+?\d[\d\s\-]{6,15}\d)/;
-  const ZOOM_HEADER_RE = /^\d{1,2}:\d{2}:\d{2}\s+From\s+(.+?)\s+to\s+(.+?):\s*$/;
+  // Matches a plausible phone number: digits with optional spaces/dashes/+prefix,
+  // at least 7 digits total. Word-boundary guarded so it won't grab a fragment
+  // sitting inside a longer digit/colon run like a timestamp.
+  const PHONE_RE = /(?<![\d:])(\+?\d[\d\s\-]{6,15}\d)(?![\d:])/;
+  const ZOOM_HEADER_RE = /^(?:\d{4}-\d{2}-\d{2}\s+)?\d{1,2}:\d{2}:\d{2}\s+From\s+(.+?)\s+to\s+(.+?):\s*$/;
 
   function normalizeStatus(rawStatus) {
     return /help/i.test(rawStatus || '') ? 'Help' : 'Others';
