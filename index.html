@@ -4,31 +4,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ledger — call list extractor</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgo8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM1YjdmZmYiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjOWI1YmZmIi8+CjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHJ4PSIxNiIgZmlsbD0idXJsKCNnKSIvPgo8cGF0aCBkPSJNMjIgMTljMC0yLjIgMS44LTQgNC00aDIuMmMxIDAgMS45LjcgMi4xIDEuN2wxLjYgNi40Yy4yLjktLjEgMS44LS44IDIuNGwtMi42IDIuMmMyLjEgNC44IDYgOC43IDEwLjggMTAuOGwyLjItMi42Yy42LS43IDEuNS0xIDIuNC0uOGw2LjQgMS42YzEgLjIgMS43IDEuMSAxLjcgMi4xVjQxYzAgMi4yLTEuOCA0LTQgNEMzMS45IDQ1IDE5IDMyLjEgMTkgMTl6IiBmaWxsPSIjZmZmZmZmIi8+Cjwvc3ZnPg==">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
   :root{
-    --obsidian: #0d1416;
-    --panel: #131c1f;
-    --panel-raised: #192327;
-    --hairline: #263336;
-    --hairline-soft: #1a2427;
-    --parchment: #f4f5fa;
-    --parchment-dim: #8d9a9b;
-    --brass: #ff7a45;
-    --brass-soft: #b85a37;
-    --sage: #4fd8c4;
-    --help: #ff6b81;
-    --others: #4fd8c4;
+    --obsidian: #0b0c1a;
+    --panel: #14162a;
+    --panel-raised: #1a1d38;
+    --hairline: #2a2c4d;
+    --hairline-soft: #1c1e38;
+    --parchment: #f3f2fb;
+    --parchment-dim: #9294b8;
+    --brass: #6f83ff;
+    --brass-soft: #5648a8;
+    --sage: #9b8bff;
+    --help: #ff5b9a;
+    --others: #8b6bff;
   }
 
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    background:var(--obsidian);
-    background-image:
-      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(255,122,69,0.06), transparent 60%),
-      radial-gradient(ellipse 700px 500px at 100% 30%, rgba(79,216,196,0.07), transparent 60%);
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(111,131,255,0.09), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 30%, rgba(155,107,255,0.09), transparent 60%),
+      linear-gradient(160deg, #0a0c1c 0%, #10122c 35%, #171338 70%, #1c1140 100%);
     color:var(--parchment);
     font-family:'Inter', sans-serif;
     min-height:100vh;
@@ -88,7 +89,9 @@
   .panel{
     border:1px solid var(--hairline);
     border-radius:10px;
-    background:var(--panel);
+    background:
+      linear-gradient(160deg, rgba(111,131,255,0.045), rgba(155,107,255,0.045)),
+      var(--panel);
     padding:36px;
   }
 
@@ -182,15 +185,15 @@
     letter-spacing:0.01em;
   }
   .btn-primary{
-    background:var(--brass);
-    color:#1b1508;
-    border:1px solid var(--brass);
+    background:linear-gradient(135deg, #6f83ff, #9b5bff);
+    color:#0b0c1a;
+    border:1px solid transparent;
     border-radius:7px;
     padding:13px 24px;
     font-weight:600;
-    transition:background .15s ease, transform .1s ease;
+    transition:filter .15s ease, transform .1s ease;
   }
-  .btn-primary:hover{ background:#d6ae65; }
+  .btn-primary:hover{ filter:brightness(1.1); }
   .btn-primary:active{ transform:translateY(1px); }
   .btn-primary:disabled{
     background:transparent;
@@ -362,7 +365,7 @@
     </div>
   </section>
 
-  <footer></footer>
+  <footer>runs entirely in your browser — nothing is uploaded anywhere</footer>
 </div>
 
 <script>
