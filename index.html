@@ -509,7 +509,7 @@
   parseBtn.addEventListener('click', () => {
     const text = pasteArea.value || rawText;
     const rows = parseText(text);
-    lastRows = groupByStatus(rows.filter(r => r.ok));
+    lastRows = groupByStatus(dedupeLeads(rows.filter(r => r.ok)));
     renderResults(rows);
   });
 
@@ -523,16 +523,35 @@
     return [...help, ...others];
   }
 
+  // Collapses duplicate phone numbers to a single row.
+  // If the same number appears as both Help and Others, the Help version wins.
+  function dedupeLeads(rows) {
+    const byPhone = new Map();
+    for (const r of rows) {
+      const existing = byPhone.get(r.phone);
+      if (!existing) {
+        byPhone.set(r.phone, r);
+      } else if (existing.status !== 'Help' && r.status === 'Help') {
+        byPhone.set(r.phone, r);
+      }
+      // otherwise: existing already Help, or both Others — keep the first one seen
+    }
+    return Array.from(byPhone.values());
+  }
+
   function renderResults(rows) {
     resultsSection.style.display = 'block';
     resultsBody.innerHTML = '';
-    const good = groupByStatus(rows.filter(r => r.ok));
+    const okRows = rows.filter(r => r.ok);
     const bad = rows.filter(r => !r.ok);
+    const good = groupByStatus(dedupeLeads(okRows));
+    const duplicatesRemoved = okRows.length - good.length;
 
     countBadge.innerHTML = `<b>${good.length}</b> found`;
-    resultsNote.textContent = bad.length
-      ? `${bad.length} line${bad.length === 1 ? '' : 's'} had no phone number and were left out.`
-      : '';
+    const notes = [];
+    if (bad.length) notes.push(`${bad.length} line${bad.length === 1 ? '' : 's'} had no phone number and were left out.`);
+    if (duplicatesRemoved > 0) notes.push(`${duplicatesRemoved} duplicate number${duplicatesRemoved === 1 ? '' : 's'} merged (Help kept over Others).`);
+    resultsNote.textContent = notes.join(' ');
 
     if (good.length === 0) {
       const div = document.createElement('div');
