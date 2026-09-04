@@ -35,7 +35,7 @@
   .wrap{max-width:740px; margin:0 auto;}
 
   header{
-    padding:96px 0 56px;
+    padding:64px 0 40px;
     animation:rise .7s cubic-bezier(.16,1,.3,1) both;
   }
   @keyframes rise{
@@ -493,7 +493,7 @@
   parseBtn.addEventListener('click', () => {
     const text = pasteArea.value || rawText;
     const rows = parseText(text);
-    lastRows = rows;
+    lastRows = groupByStatus(rows.filter(r => r.ok));
     renderResults(rows);
   });
 
@@ -501,10 +501,16 @@
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
+  function groupByStatus(rows) {
+    const help = rows.filter(r => r.status === 'Help');
+    const others = rows.filter(r => r.status !== 'Help');
+    return [...help, ...others];
+  }
+
   function renderResults(rows) {
     resultsSection.style.display = 'block';
     resultsBody.innerHTML = '';
-    const good = rows.filter(r => r.ok);
+    const good = groupByStatus(rows.filter(r => r.ok));
     const bad = rows.filter(r => !r.ok);
 
     countBadge.innerHTML = `<b>${good.length}</b> found`;
