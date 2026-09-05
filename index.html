@@ -563,7 +563,8 @@
   }
 
   function isIgnoredName(name) {
-    return IGNORED_NAMES.includes(name.trim().toLowerCase());
+    const normalized = name.trim().toLowerCase().replace(/[.,]/g, '').replace(/\s+/g, ' ');
+    return IGNORED_NAMES.includes(normalized);
   }
 
   function parseZoomChat(text) {
