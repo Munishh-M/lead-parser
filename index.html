@@ -9,34 +9,65 @@
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
   :root{
-    --obsidian: #150a1e;
-    --panel: #1e1130;
-    --panel-raised: #261a40;
-    --hairline: #3a2454;
-    --hairline-soft: #291640;
-    --parchment: #f8f1fb;
-    --parchment-dim: #ab93c4;
-    --brass: #c661ff;
-    --brass-soft: #8b3ec4;
-    --sage: #e07aff;
-    --help: #ff4fa3;
-    --others: #a855f7;
+    --obsidian: #05050a;
+    --panel: #0c0c11;
+    --panel-raised: #131318;
+    --hairline: #2b2b33;
+    --hairline-soft: #1b1b21;
+    --parchment: #f1f1f4;
+    --parchment-dim: #8b8b93;
+    --brass: #d8cba8;
+    --brass-soft: #8f8a72;
+    --sage: #c9c9d6;
+    --help: #ff5c5c;
+    --others: #9aa0ad;
   }
 
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html,body{margin:0;padding:0; overflow-x:hidden;}
+
+  .bg-orbs{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .scene-bg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+  }
+  .scene-bg svg{
+    width:100%;
+    height:100%;
+    display:block;
+    opacity:0.6;
+  }
+  .scene-moon{
+    animation:moonGlow 8s ease-in-out infinite;
+    transform-origin:600px 300px;
+  }
+  @keyframes moonGlow{
+    0%, 100%{ opacity:0.9; }
+    50%{ opacity:1; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .scene-moon{ animation:none; }
+  }
+  @media (max-width: 900px){
+    .scene-bg svg{ opacity:0.4; }
+  }
+
+  .wrap{max-width:740px; margin:0 auto; position:relative; z-index:1;}
   body{
-    background:
-      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(168,85,247,0.10), transparent 60%),
-      radial-gradient(ellipse 700px 500px at 100% 30%, rgba(255,79,163,0.09), transparent 60%),
-      linear-gradient(160deg, #170a22 0%, #200c30 35%, #2b0f3f 70%, #3a0f42 100%);
+    background:linear-gradient(180deg, #050508 0%, #0d0d13 45%, #17171e 75%, #1f1f26 100%);
     color:var(--parchment);
     font-family:'Inter', sans-serif;
     min-height:100vh;
     padding:0 24px 120px;
   }
-
-  .wrap{max-width:740px; margin:0 auto;}
 
   header{
     padding:64px 0 40px;
@@ -90,7 +121,7 @@
     border:1px solid var(--hairline);
     border-radius:10px;
     background:
-      linear-gradient(160deg, rgba(168,85,247,0.05), rgba(255,79,163,0.05)),
+      linear-gradient(160deg, rgba(255,255,255,0.035), rgba(255,255,255,0.01)),
       var(--panel);
     padding:36px;
   }
@@ -185,8 +216,8 @@
     letter-spacing:0.01em;
   }
   .btn-primary{
-    background:linear-gradient(135deg, #a855f7, #ff4fa3);
-    color:#1a0a20;
+    background:linear-gradient(135deg, #d8cba8, #f5efe0);
+    color:#161612;
     border:1px solid transparent;
     border-radius:7px;
     padding:13px 24px;
@@ -280,12 +311,12 @@
   .tag.tag-help{
     border-color:var(--help);
     color:var(--help);
-    background:rgba(255,107,129,0.08);
+    background:rgba(255,92,92,0.10);
   }
   .tag.tag-others{
     border-color:var(--others);
     color:var(--others);
-    background:rgba(79,216,196,0.08);
+    background:rgba(154,160,173,0.10);
   }
 
   .empty-state{
@@ -312,6 +343,95 @@
 </style>
 </head>
 <body>
+<div class="bg-orbs">
+  <div class="scene-bg">
+    <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#020203"/>
+          <stop offset="0.45" stop-color="#1a1a20"/>
+          <stop offset="0.75" stop-color="#3a3a42"/>
+          <stop offset="1" stop-color="#54545e"/>
+        </linearGradient>
+        <radialGradient id="moon" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stop-color="#ffffff"/>
+          <stop offset="0.55" stop-color="#e9e9ee"/>
+          <stop offset="1" stop-color="#c9c9d2" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <rect x="0" y="0" width="1200" height="700" fill="url(#sky)"/>
+      <circle class="scene-moon" cx="600" cy="300" r="150" fill="url(#moon)"/>
+
+      <!-- distant mountains -->
+      <polygon fill="#2c2c34" points="0,560 90,520 180,545 260,500 360,540 460,510 560,545 600,560 1200,560 1200,700 0,700"/>
+      <polygon fill="#1a1a20" points="0,590 120,550 220,580 320,545 440,585 560,555 700,590 820,560 940,595 1060,565 1200,590 1200,700 0,700"/>
+
+      <!-- torii gate (left) -->
+      <g fill="#050506">
+        <rect x="150" y="470" width="14" height="120"/>
+        <rect x="230" y="470" width="14" height="120"/>
+        <rect x="140" y="455" width="115" height="12"/>
+        <rect x="150" y="480" width="94" height="9"/>
+      </g>
+
+      <!-- pagoda (right) -->
+      <g fill="#050506">
+        <polygon points="900,480 940,455 980,480"/>
+        <rect x="915" y="480" width="50" height="14"/>
+        <polygon points="890,500 940,472 990,500"/>
+        <rect x="905" y="500" width="70" height="14"/>
+        <polygon points="880,522 940,490 1000,522"/>
+        <rect x="915" y="522" width="50" height="60"/>
+      </g>
+
+      <!-- boat -->
+      <g fill="#050506">
+        <path d="M1000,585 Q1050,565 1110,585 L1095,600 Q1050,610 1015,600 Z"/>
+        <rect x="1050" y="530" width="4" height="55"/>
+        <polygon points="1054,532 1054,555 1075,545"/>
+      </g>
+
+      <!-- bamboo -->
+      <g stroke="#050506" stroke-width="5" fill="none">
+        <line x1="1100" y1="600" x2="1100" y2="470"/>
+        <line x1="1120" y1="600" x2="1120" y2="440"/>
+        <line x1="1140" y1="600" x2="1140" y2="480"/>
+      </g>
+      <g fill="#050506">
+        <ellipse cx="1112" cy="450" rx="22" ry="8" transform="rotate(-20 1112 450)"/>
+        <ellipse cx="1132" cy="425" rx="22" ry="8" transform="rotate(-15 1132 425)"/>
+        <ellipse cx="1150" cy="460" rx="20" ry="7" transform="rotate(20 1150 460)"/>
+      </g>
+
+      <!-- ninja: mid-air leap, sword raised -->
+      <g fill="#020203">
+        <circle cx="472" cy="398" r="15"/>
+        <path d="M480,388 Q505,378 515,392 Q498,392 486,398 Z"/>
+        <path d="M460,410 Q472,405 486,412 L500,470 Q480,485 458,472 Z"/>
+        <path d="M486,415 L540,375 L548,385 L500,432 Z"/>
+        <path d="M462,420 L430,440 L438,455 L466,432 Z"/>
+        <path d="M462,468 Q440,490 415,540 Q428,548 442,536 Q465,505 476,478 Z"/>
+        <path d="M486,468 Q510,500 505,545 Q490,548 480,535 Q472,500 478,472 Z"/>
+        <path d="M458,405 Q435,398 420,415 Q440,412 452,415 Z"/>
+      </g>
+
+      <!-- samurai: standing, katana raised toward ninja -->
+      <g fill="#020203">
+        <polygon points="640,455 700,455 670,428"/>
+        <ellipse cx="670" cy="462" rx="16" ry="14"/>
+        <path d="M645,478 Q670,468 695,478 L718,600 Q670,622 622,600 Z"/>
+        <path d="M655,482 L600,435 L590,448 L640,498 Z"/>
+        <path d="M592,438 L588,428 L610,412 L618,424 Z"/>
+        <path d="M690,485 L720,510 L712,525 L682,502 Z"/>
+        <rect x="663" y="590" width="14" height="30"/>
+      </g>
+
+      <!-- foreground ground -->
+      <rect x="0" y="630" width="1200" height="70" fill="#000000"/>
+    </svg>
+  </div>
+</div>
 <div class="wrap">
 
   <header>
